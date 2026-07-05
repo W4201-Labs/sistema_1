@@ -4,18 +4,15 @@
 
 ## Current State
 
-- M2/Controlled documents implemented and verified.
+- M2/Controlled documents implemented, verified, and committed as `d6a601f feat(documents): implement M2 lifecycle`.
 - M1/Tenancy & standards remains implemented and verified.
-- Engine requirements module exists with tree rollups and applicability governance.
 - Engine documents lifecycle module exists with fixed state transitions, immutable official guard, official PDF requirement, and preparer/approver segregation.
-- Convex M1 backend modules exist for organizations, standards, generic import, and applicability decisions.
 - Convex M2 backend module exists for documents, document versions, typed requirement links, transitions, metadata immutability guard, and audit entries.
 - Admin, Processes, Standards, Documents, and Dashboard pages now show MVP workflow surfaces instead of placeholders.
-- Two generic standard-pack seed files exist under `seeds/standard-packs/`.
 
 ## Critical Technical Context
 
-- Git repository is present at `/home/w182/w421/sistema_1`.
+- Branch `main` is ahead of `origin/main` by 3 commits.
 - Convex is not linked; temporary `convex/_generated/*` placeholders remain.
 - Clerk env vars are not configured; local fallback remains active.
 - UI currently uses demo data because live Convex provider/client wiring waits on Convex setup.
@@ -31,6 +28,6 @@
 
 ## Branch Status
 
-- Branch: repository present
-- Status: M2 changes committed after verification
-- Pending changes: source documents may remain untracked if not intentionally added
+- Branch: `main`
+- Status: ahead of `origin/main` by 3 commits
+- Pending changes: saver log updates plus pre-existing untracked planning/source docs and `tsconfig.tsbuildinfo`
