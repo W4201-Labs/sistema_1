@@ -1,22 +1,21 @@
 export default function DashboardPage() {
   return (
     <section className="panel">
+      <p className="eyebrow">M1 active</p>
       <h1>Foundation dashboard</h1>
-      <p className="muted">
-        M0 is wired for Next.js, Clerk organization auth, Convex schema, Vitest, and Playwright.
-      </p>
+      <p className="muted">Tenant setup and standard-pack import are now represented end to end.</p>
       <div className="grid">
         <div className="panel">
-          <div className="muted">Tenant isolation</div>
-          <div className="metric">orgId</div>
+          <div className="muted">Tenant objects</div>
+          <div className="metric">scoped</div>
         </div>
         <div className="panel">
-          <div className="muted">Schema tables</div>
-          <div className="metric">generic</div>
+          <div className="muted">Standard packs</div>
+          <div className="metric">2</div>
         </div>
         <div className="panel">
-          <div className="muted">Engine boundary</div>
-          <div className="metric">empty</div>
+          <div className="muted">Applicability</div>
+          <div className="metric">audited</div>
         </div>
       </div>
     </section>

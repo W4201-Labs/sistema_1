@@ -84,10 +84,133 @@ textarea {
   padding: 20px;
 }
 
+.stack {
+  display: grid;
+  gap: 18px;
+}
+
+.page-heading,
+.table-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
+}
+
+.grid.two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.table-list,
+.requirement-tree,
+.process-column,
+.form-panel {
+  display: grid;
+  gap: 12px;
+}
+
+.table-row {
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+}
+
+.table-row:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.table-row.tall {
+  align-items: flex-start;
+}
+
+.table-row.compact {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.badge {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--accent-dark);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 8px;
+  white-space: nowrap;
+}
+
+.primary-button {
+  background: var(--accent);
+  border: 0;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-weight: 700;
+  padding: 10px 14px;
+}
+
+.eyebrow,
+.meta-line {
+  color: var(--accent-dark);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.process-board {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.process-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.node-list {
+  margin: 10px 0 0;
+  padding-left: 18px;
+}
+
+.tree-section {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.tree-children {
+  display: grid;
+  gap: 10px;
+  margin: 14px 0 0 22px;
+}
+
+label {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+input,
+textarea {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--foreground);
+  min-width: 0;
+  padding: 10px;
+}
+
+textarea {
+  min-height: 110px;
+  resize: vertical;
 }
 
 .metric {
@@ -111,5 +234,16 @@ textarea {
 
   .grid {
     grid-template-columns: 1fr;
+  }
+
+  .grid.two,
+  .process-board {
+    grid-template-columns: 1fr;
+  }
+
+  .page-heading,
+  .table-row {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }
