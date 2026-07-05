@@ -125,3 +125,55 @@ export const applicabilityRows = [
     review: "2026-11-01"
   }
 ];
+
+export const documents = [
+  {
+    code: "QMS-DOC-01",
+    name: "Document control procedure",
+    docType: "procedure",
+    process: "Document control",
+    externalEditableUrl: "https://docs.example.test/edit/qms-doc-01",
+    owner: "L. Gomez",
+    shared: true,
+    currentVersion: "2.0",
+    status: "effective",
+    immutable: true,
+    candidate: "candidate uploaded",
+    official: "official PDF attached",
+    links: [
+      { requirement: "Quality Management System / Documented information", type: "covers" },
+      { requirement: "Testing Laboratory Competence / Management records", type: "supports" }
+    ]
+  },
+  {
+    code: "OPS-WI-07",
+    name: "Report release work instruction",
+    docType: "work_instruction",
+    process: "Service delivery",
+    externalEditableUrl: "https://docs.example.test/edit/ops-wi-07",
+    owner: "A. Chen",
+    shared: false,
+    currentVersion: "1.3",
+    status: "under_review",
+    immutable: false,
+    candidate: "candidate uploaded",
+    official: "pending approval",
+    links: [
+      { requirement: "Quality Management System / Operational planning", type: "partially_covers" },
+      { requirement: "Testing Laboratory Competence / Report release", type: "verifies" }
+    ]
+  }
+];
+
+export const documentLifecycle = [
+  { step: "draft", actor: "Preparer", audit: "version created" },
+  { step: "under_review", actor: "Reviewer", audit: "submitted for review" },
+  { step: "changes_requested", actor: "Reviewer", audit: "review change request" },
+  { step: "approved", actor: "Approver", audit: "approval event" },
+  { step: "effective", actor: "Approver", audit: "official PDF locked" },
+  { step: "under_revision", actor: "Owner", audit: "revision opened" },
+  { step: "superseded", actor: "Manager", audit: "replacement active" },
+  { step: "obsolete", actor: "Manager", audit: "obsolete marked" },
+  { step: "withdrawn", actor: "Manager", audit: "withdrawn before use" },
+  { step: "archived", actor: "Manager", audit: "archive event" }
+];

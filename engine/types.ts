@@ -41,3 +41,36 @@ export type ApplicabilityResolution = {
   source: "explicit" | "inherited" | "default";
   record?: ApplicabilityRecord;
 };
+
+export type DocumentLifecycleStatus =
+  | "draft"
+  | "under_review"
+  | "changes_requested"
+  | "approved"
+  | "effective"
+  | "under_revision"
+  | "superseded"
+  | "obsolete"
+  | "withdrawn"
+  | "archived";
+
+export type DocumentLifecycleTransition =
+  | "submit_for_review"
+  | "request_changes"
+  | "approve"
+  | "make_effective"
+  | "start_revision"
+  | "supersede"
+  | "mark_obsolete"
+  | "withdraw"
+  | "archive";
+
+export type DocumentLinkType =
+  | "covers"
+  | "partially_covers"
+  | "supports"
+  | "evidences"
+  | "verifies"
+  | "monitors"
+  | "replaces"
+  | "justifies_na";

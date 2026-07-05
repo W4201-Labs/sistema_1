@@ -200,6 +200,7 @@ label {
 }
 
 input,
+select,
 textarea {
   border: 1px solid var(--line);
   border-radius: 6px;
@@ -217,6 +218,55 @@ textarea {
   font-size: 28px;
   font-weight: 700;
   margin-top: 8px;
+}
+
+.document-card {
+  display: grid;
+  gap: 16px;
+}
+
+.document-meta {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.document-meta > div {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.document-meta strong {
+  overflow-wrap: anywhere;
+}
+
+.integrity-box {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--muted);
+  font-weight: 700;
+  padding: 10px;
+}
+
+.integrity-box.locked {
+  border-color: var(--accent);
+  color: var(--accent-dark);
+}
+
+.lifecycle-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.lifecycle-step {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 6px;
+  min-height: 112px;
+  padding: 12px;
 }
 
 .muted {
@@ -237,7 +287,12 @@ textarea {
   }
 
   .grid.two,
-  .process-board {
+  .process-board,
+  .lifecycle-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .document-meta {
     grid-template-columns: 1fr;
   }
 
