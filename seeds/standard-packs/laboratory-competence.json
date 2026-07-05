@@ -1,0 +1,28 @@
+{
+  "standard": {
+    "name": "Testing Laboratory Competence",
+    "version": "2017",
+    "issuingBody": "Licensed source entered by tenant",
+    "status": "active"
+  },
+  "requirements": [
+    { "key": "structural", "number": "5", "title": "Structural requirements", "order": 1 },
+    { "key": "resource", "number": "6", "title": "Resource requirements", "order": 2 },
+    { "key": "personnel", "parentKey": "resource", "number": "6.2", "title": "Personnel", "order": 3 },
+    { "key": "process", "number": "7", "title": "Process requirements", "order": 4 },
+    {
+      "key": "review-requests",
+      "parentKey": "process",
+      "number": "7.1",
+      "title": "Review of requests",
+      "order": 5
+    },
+    {
+      "key": "technical-records",
+      "parentKey": "process",
+      "number": "7.5",
+      "title": "Technical records",
+      "order": 6
+    }
+  ]
+}
