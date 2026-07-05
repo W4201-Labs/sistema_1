@@ -1,7 +1,11 @@
 import type {
   ApplicabilityDecision,
+  ControlComplianceMode,
+  ControlCriticality,
+  ControlEvaluationResult,
   DocumentLifecycleStatus,
-  DocumentLinkType
+  DocumentLinkType,
+  RuleNode
 } from "@/engine/types";
 
 type DemoRole = "manager" | "user" | "external";
@@ -80,6 +84,38 @@ export interface DemoLifecycleStep {
   step: DocumentLifecycleStatus;
   actor: string;
   audit: string;
+}
+
+export interface DemoControl {
+  code: string;
+  name: string;
+  phase: string;
+  process: string;
+  criticality: ControlCriticality;
+  blocksClosure: boolean;
+  allowsNA: boolean;
+  allowsJustification: boolean;
+  complianceMode: ControlComplianceMode;
+  rule: RuleNode;
+  requirements: string[];
+}
+
+export interface DemoControlEvaluation {
+  control: string;
+  result: ControlEvaluationResult;
+  evidence: string;
+  reason: string;
+  frozen: boolean;
+}
+
+export interface DemoCycle {
+  name: string;
+  process: string;
+  state: "open" | "in_progress" | "closed";
+  workflow: string;
+  canClose: boolean;
+  blockers: string[];
+  snapshot: string;
 }
 
 export const lines: DemoLine[] = [
@@ -266,3 +302,84 @@ export const documentLifecycle: DemoLifecycleStep[] = [
   { step: "withdrawn", actor: "Manager", audit: "withdrawn before use" },
   { step: "archived", actor: "Manager", audit: "archive event" }
 ];
+
+export const controls: DemoControl[] = [
+  {
+    code: "CTRL-DOC-APP",
+    name: "Official document approval",
+    phase: "documented information",
+    process: "Document control",
+    criticality: "high",
+    blocksClosure: true,
+    allowsNA: false,
+    allowsJustification: true,
+    complianceMode: "manual_status",
+    rule: {
+      all: [
+        { field: "documentStatus", op: "eq", value: "effective" },
+        { field: "officialPdf", op: "exists" }
+      ]
+    },
+    requirements: ["Quality Management System / Documented information", "Testing Laboratory Competence / Management records"]
+  },
+  {
+    code: "CTRL-REC-FILE",
+    name: "Release evidence retained",
+    phase: "service delivery",
+    process: "Service delivery",
+    criticality: "medium",
+    blocksClosure: false,
+    allowsNA: false,
+    allowsJustification: true,
+    complianceMode: "manual_file",
+    rule: { all: [{ field: "fileUploaded", op: "eq", value: true }, { field: "retentionMonths", op: "gte", value: 12 }] },
+    requirements: ["Quality Management System / Operational planning"]
+  },
+  {
+    code: "CTRL-SCOPE-NA",
+    name: "Scoped not-applicable justification",
+    phase: "applicability",
+    process: "Management system planning",
+    criticality: "low",
+    blocksClosure: false,
+    allowsNA: true,
+    allowsJustification: true,
+    complianceMode: "justified_not_applicable",
+    rule: { field: "justification", op: "exists" },
+    requirements: ["Testing Laboratory Competence / Optional service scope"]
+  }
+];
+
+export const controlEvaluations: DemoControlEvaluation[] = [
+  {
+    control: "CTRL-DOC-APP",
+    result: "pass",
+    evidence: "official PDF QMS-DOC-01 v2.0",
+    reason: "documentStatus effective and officialPdf present",
+    frozen: false
+  },
+  {
+    control: "CTRL-REC-FILE",
+    result: "warning",
+    evidence: "release record upload pending retention metadata",
+    reason: "retentionMonths below configured threshold",
+    frozen: false
+  },
+  {
+    control: "CTRL-SCOPE-NA",
+    result: "not_applicable",
+    evidence: "approved scope decision",
+    reason: "service is outside approved tenant scope",
+    frozen: false
+  }
+];
+
+export const auditCycle: DemoCycle = {
+  name: "2026 mid-year readiness cycle",
+  process: "Document control + Service delivery",
+  state: "in_progress",
+  workflow: "open -> in_progress -> closed; reopen requires reason",
+  canClose: true,
+  blockers: [],
+  snapshot: "created on close with frozen control evaluations and evidence refs"
+};

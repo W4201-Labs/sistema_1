@@ -225,6 +225,43 @@ textarea {
   gap: 16px;
 }
 
+.control-card,
+.cycle-card {
+  display: grid;
+  gap: 16px;
+}
+
+.control-flags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.rule-preview {
+  background: #101820;
+  border-radius: 8px;
+  color: #e9f1f4;
+  font-size: 12px;
+  line-height: 1.45;
+  margin: 0;
+  overflow-x: auto;
+  padding: 12px;
+}
+
+.workflow-rail {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.workflow-rail span {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-weight: 700;
+  padding: 10px;
+  text-align: center;
+}
+
 .document-meta {
   display: grid;
   gap: 10px;
@@ -288,7 +325,8 @@ textarea {
 
   .grid.two,
   .process-board,
-  .lifecycle-grid {
+  .lifecycle-grid,
+  .workflow-rail {
     grid-template-columns: 1fr;
   }
 
