@@ -39,6 +39,9 @@ export const createEquivalence = mutation({
     if (requirementA.orgId !== auth.orgId || requirementB.orgId !== auth.orgId) {
       throw new Error("Requirement not found.");
     }
+    if (args.requirementA === args.requirementB) {
+      throw new Error("A requirement cannot be equivalent to itself.");
+    }
 
     return await ctx.db.insert("requirementEquivalences", {
       orgId: auth.orgId,

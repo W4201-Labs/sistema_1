@@ -2,8 +2,11 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
 const role = v.union(v.literal("manager"), v.literal("user"), v.literal("external"));
-const status = (...values: string[]) => v.union(...values.map((value) => v.literal(value)) as never);
+function status<const T extends readonly [string, string, ...string[]]>(...values: T) {
+  return v.union(...values.map((value) => v.literal(value)));
+}
 const anyObject = v.record(v.string(), v.any());
+const metadataRecord = v.record(v.string(), v.union(v.string(), v.number(), v.boolean()));
 
 export default defineSchema({
   organizations: defineTable({
@@ -228,7 +231,7 @@ export default defineSchema({
     orgId: v.string(),
     formId: v.id("forms"),
     processId: v.id("processes"),
-    data: anyObject,
+    data: metadataRecord,
     status: status("draft", "finalized"),
     finalizedByUserId: v.optional(v.id("users")),
     finalizedAt: v.optional(v.number())
@@ -273,7 +276,7 @@ export default defineSchema({
     action: v.string(),
     entityKind: v.string(),
     entityId: v.string(),
-    metadata: v.optional(anyObject)
+    metadata: v.optional(metadataRecord)
   }).index("by_org", ["orgId"]).index("by_entity", ["entityKind", "entityId"]),
 
   notifications: defineTable({

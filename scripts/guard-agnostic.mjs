@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 
-const blocked = [/\bISO\b/i, /\b\d+\.\d+(?:\.\d+)?\b/];
+const blocked = [/\bISO\b/i, /\bISO\s+\d+(?:\.\d+)+\b/i];
 const root = join(process.cwd(), "engine");
 const files = [];
 

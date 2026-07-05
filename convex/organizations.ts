@@ -50,6 +50,7 @@ export const upsertCurrentOrganization = mutation({
       .filter((q) => q.eq(q.field("orgId"), auth.orgId))
       .unique();
 
+    const role = existingOrg ? "user" : "manager";
     const userId =
       existingUser?._id ??
       (await ctx.db.insert("users", {
@@ -57,7 +58,7 @@ export const upsertCurrentOrganization = mutation({
         clerkUserId: auth.clerkUserId,
         email: args.user.email,
         name: args.user.name,
-        role: "manager",
+        role,
         status: "active"
       }));
 
@@ -103,6 +104,10 @@ export const createLine = mutation({
   },
   handler: async (ctx, args) => {
     const auth = await requireManager(ctx);
+    if (args.managerUserId) {
+      const manager = await ctx.db.get(args.managerUserId);
+      if (!manager || manager.orgId !== auth.orgId) throw new Error("Manager not found.");
+    }
     return await ctx.db.insert("lines", {
       orgId: auth.orgId,
       name: args.name,
@@ -123,6 +128,15 @@ export const upsertProcess = mutation({
   },
   handler: async (ctx, args) => {
     const auth = await requireManager(ctx);
+    if (args.lineId) {
+      const line = await ctx.db.get(args.lineId);
+      if (!line || line.orgId !== auth.orgId) throw new Error("Line not found.");
+    }
+    if (args.parentProcessId) {
+      const parent = await ctx.db.get(args.parentProcessId);
+      if (!parent || parent.orgId !== auth.orgId) throw new Error("Parent process not found.");
+    }
+
     const payload = {
       orgId: auth.orgId,
       lineId: args.lineId,
@@ -130,11 +144,10 @@ export const upsertProcess = mutation({
       processType: args.processType,
       name: args.name,
       description: args.description,
-      order: args.order,
-      status: "active" as const
+      order: args.order
     };
 
-    if (!args.processId) return await ctx.db.insert("processes", payload);
+    if (!args.processId) return await ctx.db.insert("processes", { ...payload, status: "active" as const });
 
     const existing = await ctx.db.get(args.processId);
     if (!existing || existing.orgId !== auth.orgId) throw new Error("Process not found.");
@@ -156,6 +169,11 @@ export const upsertUser = mutation({
   },
   handler: async (ctx, args) => {
     const auth = await requireManager(ctx);
+    if (args.lineId) {
+      const line = await ctx.db.get(args.lineId);
+      if (!line || line.orgId !== auth.orgId) throw new Error("Line not found.");
+    }
+
     const payload = {
       orgId: auth.orgId,
       clerkUserId: args.clerkUserId,
@@ -166,11 +184,19 @@ export const upsertUser = mutation({
       status: args.status
     };
 
-    const userId = args.userId ?? (await ctx.db.insert("users", payload));
-    if (args.userId) {
-      const existing = await ctx.db.get(args.userId);
+    let userId = args.userId;
+    if (!userId) {
+      const existing = await ctx.db
+        .query("users")
+        .withIndex("by_clerkUser", (q) => q.eq("clerkUserId", args.clerkUserId))
+        .filter((q) => q.eq(q.field("orgId"), auth.orgId))
+        .unique();
+      userId = existing?._id ?? (await ctx.db.insert("users", payload));
+      if (existing) await ctx.db.patch(existing._id, payload);
+    } else {
+      const existing = await ctx.db.get(userId);
       if (!existing || existing.orgId !== auth.orgId) throw new Error("User not found.");
-      await ctx.db.patch(args.userId, payload);
+      await ctx.db.patch(userId, payload);
     }
 
     const currentScopes = await ctx.db

@@ -9,7 +9,9 @@ export default function AdminPage() {
           <h1>Organization setup</h1>
           <p className="muted">Tenant profile, operating lines, process ownership, and user scoping.</p>
         </div>
-        <button className="primary-button">Sync from Clerk</button>
+        <button className="primary-button" disabled title="Sync from Clerk is not implemented yet.">
+          Sync from Clerk
+        </button>
       </section>
 
       <section className="grid two">

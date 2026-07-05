@@ -7,7 +7,8 @@ import type {
   ScopeKind
 } from "../types";
 
-const limitedDecisions = new Set<ApplicabilityDecision>(["partial", "selected_scope", "replaced"]);
+const limitedDecisions = new Set<ApplicabilityDecision>(["partial", "selected_scope"]);
+const notApplicableDecisions = new Set<ApplicabilityDecision>(["not_applicable", "replaced"]);
 
 export function buildRequirementTree(
   requirements: RequirementNodeInput[],
@@ -87,7 +88,7 @@ function addDecision(rollup: RequirementRollup, decision?: ApplicabilityDecision
     rollup.pending += 1;
   } else if (decision === "applicable") {
     rollup.applicable += 1;
-  } else if (decision === "not_applicable") {
+  } else if (notApplicableDecisions.has(decision)) {
     rollup.notApplicable += 1;
   } else if (limitedDecisions.has(decision)) {
     rollup.limited += 1;

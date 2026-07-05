@@ -50,9 +50,19 @@ export const decide = mutation({
     const requirement = await ctx.db.get(args.requirementId);
     if (!requirement || requirement.orgId !== auth.orgId) throw new Error("Requirement not found.");
 
-    if (args.replacedByRequirementId) {
+    if (args.decision === "replaced") {
+      if (!args.replacedByRequirementId) throw new Error("Replacement requirement is required for replaced decisions.");
       const replacement = await ctx.db.get(args.replacedByRequirementId);
       if (!replacement || replacement.orgId !== auth.orgId) throw new Error("Replacement requirement not found.");
+    }
+
+    if (args.scopeKind !== "org" && args.scopeId) {
+      const table = args.scopeKind === "line" ? "lines" : "processes";
+      const scoped = await ctx.db
+        .query(table)
+        .filter((q) => q.eq(q.field("_id"), args.scopeId))
+        .unique();
+      if (!scoped || scoped.orgId !== auth.orgId) throw new Error(`${table.slice(0, -1)} not found.`);
     }
 
     if (args.approvedByUserId) {

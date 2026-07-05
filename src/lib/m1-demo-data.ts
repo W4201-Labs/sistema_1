@@ -1,9 +1,93 @@
-export const lines = [
+import type {
+  ApplicabilityDecision,
+  DocumentLifecycleStatus,
+  DocumentLinkType
+} from "@/engine/types";
+
+type DemoRole = "manager" | "user" | "external";
+type ProcessType = "strategic" | "core" | "support" | "evaluation";
+type StandardStatus = "active";
+type DocType = "procedure" | "work_instruction";
+
+export interface DemoLine {
+  id: string;
+  name: string;
+  manager: string;
+}
+
+export interface DemoProcess {
+  id: string;
+  type: ProcessType;
+  lineId: string;
+  name: string;
+  owner: string;
+  children: string[];
+}
+
+export interface DemoUser {
+  name: string;
+  role: DemoRole;
+  scope: string;
+}
+
+export interface DemoStandard {
+  name: string;
+  version: string;
+  requirements: number;
+  status: StandardStatus;
+}
+
+export interface DemoRequirementNode {
+  number: string;
+  title: string;
+  decision?: ApplicabilityDecision;
+  process?: string;
+  rollup?: string;
+  children: DemoRequirementNode[];
+}
+
+export interface DemoApplicabilityRow {
+  requirement: string;
+  scope: string;
+  decision: ApplicabilityDecision;
+  justification: string;
+  approver: string;
+  review: string;
+}
+
+export interface DemoDocumentLink {
+  requirement: string;
+  type: DocumentLinkType;
+}
+
+export interface DemoDocument {
+  code: string;
+  name: string;
+  docType: DocType;
+  process: string;
+  externalEditableUrl: string;
+  owner: string;
+  shared: boolean;
+  currentVersion: string;
+  status: DocumentLifecycleStatus;
+  immutable: boolean;
+  candidate: string;
+  official: string;
+  links: DemoDocumentLink[];
+}
+
+export interface DemoLifecycleStep {
+  step: DocumentLifecycleStatus;
+  actor: string;
+  audit: string;
+}
+
+export const lines: DemoLine[] = [
   { id: "ln-ops", name: "Operations", manager: "M. Rivera" },
   { id: "ln-lab", name: "Lab services", manager: "A. Chen" }
 ];
 
-export const processes = [
+export const processes: DemoProcess[] = [
   {
     id: "pr-strategy",
     type: "strategic",
@@ -38,14 +122,14 @@ export const processes = [
   }
 ];
 
-export const users = [
+export const users: DemoUser[] = [
   { name: "M. Rivera", role: "manager", scope: "All processes" },
   { name: "A. Chen", role: "user", scope: "Service delivery" },
   { name: "L. Gomez", role: "user", scope: "Document control" },
   { name: "External auditor", role: "external", scope: "Published records" }
 ];
 
-export const standards = [
+export const standards: DemoStandard[] = [
   {
     name: "Quality Management System",
     version: "2015",
@@ -60,7 +144,7 @@ export const standards = [
   }
 ];
 
-export const requirementTree = [
+export const requirementTree: DemoRequirementNode[] = [
   {
     number: "7",
     title: "Support",
@@ -70,19 +154,22 @@ export const requirementTree = [
         number: "7.1",
         title: "Resources",
         decision: "applicable",
-        process: "Service delivery"
+        process: "Service delivery",
+        children: []
       },
       {
         number: "7.5",
         title: "Documented information",
         decision: "partial",
-        process: "Document control"
+        process: "Document control",
+        children: []
       },
       {
         number: "7.5.1",
         title: "General",
         decision: "applicable",
-        process: "Document control"
+        process: "Document control",
+        children: []
       }
     ]
   },
@@ -95,19 +182,21 @@ export const requirementTree = [
         number: "8.1",
         title: "Operational planning",
         decision: "selected_scope",
-        process: "Service delivery"
+        process: "Service delivery",
+        children: []
       },
       {
         number: "8.2",
         title: "Requirements for services",
         decision: "replaced",
-        process: "Request intake"
+        process: "Request intake",
+        children: []
       }
     ]
   }
 ];
 
-export const applicabilityRows = [
+export const applicabilityRows: DemoApplicabilityRow[] = [
   {
     requirement: "7.5",
     scope: "Document control",
@@ -126,7 +215,7 @@ export const applicabilityRows = [
   }
 ];
 
-export const documents = [
+export const documents: DemoDocument[] = [
   {
     code: "QMS-DOC-01",
     name: "Document control procedure",
@@ -165,7 +254,7 @@ export const documents = [
   }
 ];
 
-export const documentLifecycle = [
+export const documentLifecycle: DemoLifecycleStep[] = [
   { step: "draft", actor: "Preparer", audit: "version created" },
   { step: "under_review", actor: "Reviewer", audit: "submitted for review" },
   { step: "changes_requested", actor: "Reviewer", audit: "review change request" },

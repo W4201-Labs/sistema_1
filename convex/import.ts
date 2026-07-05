@@ -26,6 +26,11 @@ export const importStandardPack = mutation({
   },
   handler: async (ctx, args) => {
     const auth = await requireManager(ctx);
+    if (args.standard.supersedesPackId) {
+      const superseded = await ctx.db.get(args.standard.supersedesPackId);
+      if (!superseded || superseded.orgId !== auth.orgId) throw new Error("Superseded standard pack not found.");
+    }
+
     const seen = new Set<string>();
     for (const requirement of args.requirements) {
       if (seen.has(requirement.key)) throw new Error(`Duplicate requirement key: ${requirement.key}`);
