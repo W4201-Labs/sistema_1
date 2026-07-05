@@ -74,3 +74,87 @@ export type DocumentLinkType =
   | "monitors"
   | "replaces"
   | "justifies_na";
+
+export type ControlCriticality = "low" | "medium" | "high";
+
+export type ControlComplianceMode =
+  | "manual_file"
+  | "manual_status"
+  | "native_form"
+  | "justified_not_applicable"
+  | "calculated"
+  | "external";
+
+export type ControlEvaluationResult = "pass" | "warning" | "blocker" | "not_applicable" | "pending";
+
+export type RuleOperator = "eq" | "gte" | "lte" | "exists" | "empty";
+
+export type FieldRule = {
+  field: string;
+  op: RuleOperator;
+  value?: string | number | boolean | null;
+};
+
+export type RuleNode =
+  | FieldRule
+  | { all: RuleNode[] }
+  | { any: RuleNode[] }
+  | { function: string };
+
+export type ControlDefinition = {
+  id: string;
+  code: string;
+  name: string;
+  phase?: string;
+  criticality: ControlCriticality;
+  blocksClosure: boolean;
+  allowsNA: boolean;
+  allowsJustification: boolean;
+  complianceMode: ControlComplianceMode;
+  evaluationRule?: RuleNode;
+  ruleFunctionName?: string;
+};
+
+export type ControlEvaluationInput = {
+  control: ControlDefinition;
+  data?: Record<string, unknown>;
+  evidenceIds?: string[];
+  justification?: string;
+  ruleFunctions?: Record<string, (data: Record<string, unknown>) => boolean>;
+};
+
+export type ControlEvaluation = {
+  controlId: string;
+  result: ControlEvaluationResult;
+  mode: ControlComplianceMode;
+  reason: string;
+  evidenceIds: string[];
+};
+
+export type WorkflowRole = "manager" | "user" | "external";
+
+export type WorkflowTransition = {
+  from: string;
+  to: string;
+  allowedRoles: WorkflowRole[];
+  requiresReason: boolean;
+  blockingControlCriticality?: ControlCriticality;
+};
+
+export type WorkflowDefinition = {
+  states: { key: string; label: string; order: number }[];
+  transitions: WorkflowTransition[];
+};
+
+export type CycleTransitionInput = {
+  workflow: WorkflowDefinition;
+  currentState: string;
+  to: string;
+  actorRole: WorkflowRole;
+  reason?: string;
+};
+
+export type ClosureGuardResult = {
+  allowed: boolean;
+  blockers: ControlEvaluation[];
+};

@@ -1,0 +1,30 @@
+{
+  "name": "Default audit cycle workflow",
+  "isDefault": true,
+  "states": [
+    { "key": "open", "label": "Open", "order": 1 },
+    { "key": "in_progress", "label": "In progress", "order": 2 },
+    { "key": "closed", "label": "Closed", "order": 3 }
+  ],
+  "transitions": [
+    {
+      "from": "open",
+      "to": "in_progress",
+      "allowedRoles": ["manager", "user"],
+      "requiresReason": false
+    },
+    {
+      "from": "in_progress",
+      "to": "closed",
+      "allowedRoles": ["manager"],
+      "requiresReason": false,
+      "blockingControlCriticality": "high"
+    },
+    {
+      "from": "closed",
+      "to": "in_progress",
+      "allowedRoles": ["manager"],
+      "requiresReason": true
+    }
+  ]
+}
